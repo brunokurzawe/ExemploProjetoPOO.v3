@@ -2,6 +2,8 @@ package repository;
 
 import model.Pessoa;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,24 +14,38 @@ public final class PessoaDAO implements IGenericDAO<Pessoa> {
 
     @Override
     public void salvar(Pessoa pessoa) {
-        if (pessoa.getId() == null) {
-            pessoa.setId((long) (pessoas.size() + 1));
-        } else {
-            pessoas.remove((int) (pessoa.getId() - 1));
+        PessoaRepository pessoaRepository = new PessoaRepository();
+        try {
+            if (pessoa.getId() != null) {
+                pessoaRepository.update(pessoa);
+            } else {
+                pessoa.setId(pessoaRepository.proximoId().longValue());
+                pessoaRepository.insere(pessoa);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
         pessoas.add(pessoa);
     }
 
     @Override
-    public void remover(Pessoa pessoa) {
-        if (pessoa.getId() != null) {
-            pessoas.remove((int) (pessoa.getId() - 1));
-        }
+    public void remover(Pessoa pessoa) throws SQLException, ClassNotFoundException {
+        PessoaRepository pessoaRepository = new PessoaRepository();
+        pessoaRepository.delete(pessoa);
     }
 
     @Override
     public List<Pessoa> buscarTodos() {
         System.out.println(pessoas);
+
+        PessoaRepository pessoaRepository = new PessoaRepository();
+        try {
+            pessoas = pessoaRepository.busca();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         return pessoas;
     }
 

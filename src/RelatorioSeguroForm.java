@@ -6,6 +6,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
@@ -48,7 +49,11 @@ public class RelatorioSeguroForm extends JPanel {
             frame.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent evt) {
                     frame.setVisible(false);
-                    AppMain.chamaMenuRelatorios();
+                    try {
+                        AppMain.chamaMenuRelatorios();
+                    } catch (SQLException | ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
             Vector<Seguro> vetorDados = new Vector<Seguro>();

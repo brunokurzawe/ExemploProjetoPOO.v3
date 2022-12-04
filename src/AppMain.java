@@ -1,21 +1,20 @@
 import model.*;
-import repository.PessoaDAO;
-import repository.SeguradoraDAO;
-import repository.SeguroDAO;
-import repository.UsuarioDAO;
+import repository.*;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AppMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Object usuarioLogado = chamaSelecaoUsuario();
         checaSenhaUsuario(usuarioLogado);
     }
 
-    private static void chamaMenuCadastros() {
+    private static void chamaMenuCadastros() throws SQLException, ClassNotFoundException {
         String[] opcoesMenuCadastro = {"Pessoa", "Seguradora", "Seguro", "Voltar"};
         int menuCadastro = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Cadastros",
@@ -43,7 +42,7 @@ public class AppMain {
         }
     }
 
-    private static Pessoa chamaCadastroPessoa() {
+    private static Pessoa chamaCadastroPessoa() throws SQLException, ClassNotFoundException {
         Integer opcaoCrud = chamaOpcaoCrud();
         Pessoa pessoa;
         switch (opcaoCrud) {
@@ -284,7 +283,7 @@ public class AppMain {
 
     }
 
-    private static void chamaMenuProcessos() {
+    private static void chamaMenuProcessos() throws SQLException, ClassNotFoundException {
         String[] opcoesMenuProcesso = {"Gerar Sinistro", "Baixar Seguro", "Voltar"};
         int menu_processos = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Processos",
@@ -338,7 +337,7 @@ public class AppMain {
         return seguro;
     }
 
-    public static void chamaMenuRelatorios() {
+    public static void chamaMenuRelatorios() throws SQLException, ClassNotFoundException {
         String[] opcoesMenuProcesso = {"Pessoas", "Seguradoras", "Seguros", "Voltar"};
         int menu_processos = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Relatórios",
@@ -375,7 +374,7 @@ public class AppMain {
         RelatorioSeguroForm.emitirRelatorio(seguros);
     }
 
-    private static void chamaMenuPrincipal() {
+    private static void chamaMenuPrincipal() throws SQLException, ClassNotFoundException {
         String[] opcoesMenu = {"Cadastros", "Processos", "Relatorios", "Sair"};
         int opcao = JOptionPane.showOptionDialog(null, "Escolha uma opção:",
                 "Menu Principal",
@@ -396,7 +395,7 @@ public class AppMain {
         }
     }
 
-    private static void checaSenhaUsuario(Object usuarioLogado) {
+    private static void checaSenhaUsuario(Object usuarioLogado) throws SQLException, ClassNotFoundException {
         String senhaDigitada = JOptionPane.showInputDialog(null,
                 "Informe a senha do usuario (" + usuarioLogado + ")");
         Usuario usuarioByLogin = UsuarioDAO.findUsuarioByLogin((String) usuarioLogado);
