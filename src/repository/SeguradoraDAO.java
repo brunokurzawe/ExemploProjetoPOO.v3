@@ -2,6 +2,7 @@ package repository;
 
 import model.Seguradora;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,24 +12,35 @@ public final class SeguradoraDAO implements IGenericDAO<Seguradora> {
 
     @Override
     public void salvar(Seguradora seguradora) {
-        if (seguradora.getId() == null) {
-            seguradora.setId((long) (seguradoras.size() + 1));
-        } else {
-            seguradoras.remove((int) (seguradora.getId() - 1));
+        SeguradoraRepository seguradoraRepository = new SeguradoraRepository();
+        try {
+            if (seguradora.getId() != null) {
+                seguradoraRepository.update(seguradora);
+            } else {
+                seguradora.setId(seguradoraRepository.proximoId().longValue());
+                seguradoraRepository.insere(seguradora);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
         seguradoras.add(seguradora);
     }
 
     @Override
-    public void remover(Seguradora seguradora) {
-        if (seguradora.getId() != null) {
-            seguradoras.remove((int) (seguradora.getId() - 1));
-        }
+    public void remover(Seguradora seguradora) throws SQLException, ClassNotFoundException {
+        SeguradoraRepository seguradoraRepository = new SeguradoraRepository();
+        seguradoraRepository.delete(seguradora);
     }
 
     @Override
     public List<Seguradora> buscarTodos() {
-        System.out.println(seguradoras);
+        SeguradoraRepository seguradoraRepository = new SeguradoraRepository();
+        try {
+            seguradoras = seguradoraRepository.busca();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         return seguradoras;
     }
 

@@ -129,7 +129,7 @@ public class AppMain {
         return tipoOpcao;
     }
 
-    private static Seguradora chamaCadastroSeguradora() {
+    private static Seguradora chamaCadastroSeguradora() throws SQLException, ClassNotFoundException {
         Integer opcaoCrud = chamaOpcaoCrud();
         Seguradora seguradora = null;
         switch (opcaoCrud) {
@@ -205,7 +205,7 @@ public class AppMain {
         return seguros.get(0);
     }
 
-    private static Seguro chamaCadastroSeguro() {
+    private static Seguro chamaCadastroSeguro() throws SQLException, ClassNotFoundException {
         Integer opcaoCrud = chamaOpcaoCrud();
         Seguro seguro = null;
         switch (opcaoCrud) {

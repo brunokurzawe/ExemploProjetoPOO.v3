@@ -2,6 +2,7 @@ package repository;
 
 import model.Seguro;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,24 +12,35 @@ public final class SeguroDAO implements IGenericDAO<Seguro> {
 
     @Override
     public void salvar(Seguro seguro) {
-        if (seguro.getId() == null) {
-            seguro.setId((long) (seguros.size() + 1));
-        } else {
-            seguros.remove((int) (seguro.getId() - 1));
+        SeguroRepository seguroRepository = new SeguroRepository();
+        try {
+            if (seguro.getId() != null) {
+                seguroRepository.update(seguro);
+            } else {
+                seguro.setId(seguroRepository.proximoId().longValue());
+                seguroRepository.insere(seguro);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
         seguros.add(seguro);
     }
 
     @Override
-    public void remover(Seguro seguro) {
-        if (seguro.getId() != null) {
-            seguros.remove((int) (seguro.getId() - 1));
-        }
+    public void remover(Seguro seguro) throws SQLException, ClassNotFoundException {
+        SeguroRepository seguroRepository = new SeguroRepository();
+        seguroRepository.delete(seguro);
     }
 
     @Override
     public List<Seguro> buscarTodos() {
-        System.out.println(seguros);
+        SeguroRepository seguroRepository = new SeguroRepository();
+        try {
+            seguros = seguroRepository.busca();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         return seguros;
     }
 
