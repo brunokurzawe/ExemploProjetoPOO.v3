@@ -196,12 +196,12 @@ public class AppMain {
         return pessoas.get(0);
     }
 
-    private static Seguro selecaoDeSeguro() {
+    private static Seguro selecaoDeSeguro() throws SQLException, ClassNotFoundException {
         Object[] selectionValues = getSeguroDAO().findSegurosInArray();
         String initialSelection = (String) selectionValues[0];
         Object selection = JOptionPane.showInputDialog(null, "Selecione o seguro?",
                 "SeguradoraAPP", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        List<Seguro> seguros = getSeguroDAO().buscarPorNome((String) selection);
+        List<Seguro> seguros = getSeguroDAO().buscarPorId(Long.parseLong((String) selection));
         return seguros.get(0);
     }
 
@@ -269,10 +269,11 @@ public class AppMain {
                 "Tipo Pessoa",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcaoSeguro, opcaoSeguro[0]);
 
-        String valorApolice = JOptionPane.showInputDialog(null, "Digite o valor da apolice de seguro: ");
-        String valorPremio = JOptionPane.showInputDialog(null, "Digite o valor do premio da apolice: ");
+        String valorApolice = JOptionPane.showInputDialog(null, "Digite o valor da apolice de seguro: ", seguroEdit.getValorApolice());
+        String valorPremio = JOptionPane.showInputDialog(null, "Digite o valor do premio da apolice: ", seguroEdit.getValorPremio());
 
         Seguro seguro = new Seguro();
+        seguro.setId(seguroEdit.getId());
         seguro.setSegurado(pessoa);
         seguro.setTipo(TipoSeguro.getTipoById(tipoSeguro));
         seguro.setSeguradora(seguradoras.get(0));

@@ -44,6 +44,12 @@ public final class SeguroDAO implements IGenericDAO<Seguro> {
         return seguros;
     }
 
+    public List<Seguro> buscarPorId(Long id) throws SQLException, ClassNotFoundException {
+        SeguroRepository seguroRepository = new SeguroRepository();
+        List<Seguro> seguros1 = seguroRepository.buscaPorId(id);
+        return seguros1;
+    }
+
     @Override
     public List<Seguro> buscarPorNome(String nome) {
         List<Seguro> filtradas = new ArrayList<>();
@@ -60,7 +66,7 @@ public final class SeguroDAO implements IGenericDAO<Seguro> {
         List<String> segurosNomes = new ArrayList<>();
 
         for (Seguro seguro : seguros) {
-            segurosNomes.add(seguro.getSegurado().getNome());
+            segurosNomes.add(seguro.getId().toString());
         }
 
         return segurosNomes.toArray();

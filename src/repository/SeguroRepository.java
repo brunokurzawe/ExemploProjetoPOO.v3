@@ -116,7 +116,7 @@ public class SeguroRepository {
         stmt.setInt(3, seguro.getTipo().ordinal());
         stmt.setBigDecimal(4, seguro.getValorApolice());
         stmt.setBigDecimal(5, seguro.getValorPremio());
-        stmt.setInt(4, seguro.getId().intValue());
+        stmt.setInt(6, seguro.getId().intValue());
 
         int i = stmt.executeUpdate();
         System.out.println(i + " linhas atualizadas");
